@@ -5,131 +5,92 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đèn Kéo Quân - Nguyễn Hữu Trí</title>
     <style>
-        /* CSS Cơ bản cho trang */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: #111; /* Nền tối để nổi bật đèn */
-            color: #ff00ff; /* Chữ hồng Neon cho style của bạn */
+            background: #0b0b0b;
+            color: #ff00ff;
             font-family: 'Segoe UI', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            perspective: 2000px; /* Quan trọng để tạo hiệu ứng 3D */
+            perspective: 1500px; /* Tạo độ sâu cho không gian 3D */
             overflow: hidden;
         }
 
-        h1 { margin-bottom: 2rem; text-shadow: 0 0 10px #ff00ff; }
-        
+        h1 { margin-bottom: 2rem; text-shadow: 0 0 15px #ff00ff; }
+
         .back-link {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            color: #b388ff; /* Lavender */
-            text-decoration: none;
-            font-weight: bold;
+            position: absolute; top: 20px; left: 20px;
+            color: #b388ff; text-decoration: none; font-weight: bold;
         }
-        .back-link:hover { text-shadow: 0 0 5px #b388ff; }
 
-        /* --- CSS CHO ĐÈN KÉO QUÂN (Sử dụng CSS 3D) --- */
+        /* KHUNG CHỨA ĐÈN */
         .stage {
-            width: 300px;
-            height: 300px;
+            width: 210px;
+            height: 140px;
             position: relative;
+            transform-style: preserve-3d;
+            animation: rotate-carousel 15s infinite linear;
+            cursor: pointer;
         }
 
-        .carousel {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            transform-style: preserve-3d; /* Giữ các mặt trong không gian 3D */
-            /* Animation mặc định: quay liên tục */
-            animation: rotate-carousel 15s infinite linear; 
+        /* Dừng khi rê chuột vào */
+        .stage:hover {
+            animation-play-state: paused;
         }
 
-        /* Định nghĩa các mặt của đèn */
-        .face {
+        .carousel__cell {
             position: absolute;
-            width: 250px;
-            height: 250px;
-            left: 25px; /* Căn giữa */
-            top: 25px;
-            background: rgba(179, 136, 255, 0.2); /* Nền trong suốt màu Lavender */
-            border: 2px solid #ff00ff; /* Viền hồng Neon */
-            border-radius: 10px;
-            box-shadow: 0 0 20px #ff00ff, inset 0 0 15px #b388ff;
+            width: 190px;
+            height: 120px;
+            left: 10px;
+            top: 10px;
+            border: 2px solid #ff00ff;
+            box-shadow: 0 0 15px #ff00ff;
+            border-radius: 8px;
+            overflow: hidden;
+            background: black;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            color: #fff;
-            backface-visibility: hidden; /* Ẩn mặt sau khi nó quay ra xa */
         }
 
-        /* Thêm ảnh vào các mặt (Nếu có, bạn có thể thay nội dung bằng thẻ <img>) */
-        .face:nth-child(1) { background-color: rgba(255, 0, 0, 0.4); } /* Đỏ */
-        .face:nth-child(2) { background-color: rgba(0, 255, 0, 0.4); } /* Xanh lá */
-        .face:nth-child(3) { background-color: rgba(0, 0, 255, 0.4); } /* Xanh dương */
-        .face:nth-child(4) { background-color: rgba(255, 255, 0, 0.4); } /* Vàng */
-        .face:nth-child(5) { background-color: rgba(255, 165, 0, 0.4); } /* Cam */
-        .face:nth-child(6) { background-color: rgba(128, 0, 128, 0.4); } /* Tím */
+        .carousel__cell img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-        /* Định vị 3D cho 6 mặt tạo thành hình trụ */
-        /* Sử dụng phép quay và phép dịch chuyển để tạo ra 6 mặt đều nhau quanh trục */
-        /* Khoảng cách dịch chuyển (translateZ) tính bằng: bán kính / tan(30 độ) ≈ 216px */
-        .face:nth-child(1) { transform: rotateY(  0deg) translateZ(216px); }
-        .face:nth-child(2) { transform: rotateY( 60deg) translateZ(216px); }
-        .face:nth-child(3) { transform: rotateY(120deg) translateZ(216px); }
-        .face:nth-child(4) { transform: rotateY(180deg) translateZ(216px); }
-        .face:nth-child(5) { transform: rotateY(240deg) translateZ(216px); }
-        .face:nth-child(6) { transform: rotateY(300deg) translateZ(216px); }
+        /* Định vị 6 mặt quanh vòng tròn (360 độ / 6 mặt = 60 độ mỗi mặt) */
+        /* translateZ khoảng 170px-180px để các cạnh không bị đè lên nhau */
+        .carousel__cell:nth-child(1) { transform: rotateY(  0deg) translateZ(180px); }
+        .carousel__cell:nth-child(2) { transform: rotateY( 60deg) translateZ(180px); }
+        .carousel__cell:nth-child(3) { transform: rotateY(120deg) translateZ(180px); }
+        .carousel__cell:nth-child(4) { transform: rotateY(180deg) translateZ(180px); }
+        .carousel__cell:nth-child(5) { transform: rotateY(240deg) translateZ(180px); }
+        .carousel__cell:nth-child(6) { transform: rotateY(300deg) translateZ(180px); }
 
-        /* Animation định nghĩa phép quay quanh trục Y */
         @keyframes rotate-carousel {
             from { transform: rotateY(0deg); }
             to   { transform: rotateY(360deg); }
         }
-
-        /* --- CSS KHI DỪNG LẠI --- */
-        /* Class này sẽ được JS thêm vào khi rê chuột */
-        .paused {
-            animation-play-state: paused !important; /* Buộc animation tạm dừng */
-        }
-
     </style>
 </head>
 <body>
 
     <a href="index.html" class="back-link">&larr; Quay lại Portfolio</a>
-
     <h1>Đèn Kéo Quân 3D</h1>
 
-    <div class="scene">
-                <div class="carousel" id="denKeoQuan">
-                    <div class="carousel__cell"><img src="https://images.unsplash.com/photo-1550439062-609e1531270e?w=500&q=80" alt="Hinh 1"></div>
-                    <div class="carousel__cell"><img src="https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=500&q=80" alt="Hinh 2"></div>
-                    <div class="carousel__cell"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=500&q=80" alt="Hinh 3"></div>
-                    <div class="carousel__cell"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500&q=80" alt="Hinh 4"></div>
-                    <div class="carousel__cell"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500&q=80" alt="Hinh 5"></div>
-                    <div class="carousel__cell"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=500&q=80" alt="Hinh 6"></div>
-                </div>
-            </div>
+    <div class="stage" id="lamp-carousel">
+        <div class="carousel__cell"><img src="https://images.unsplash.com/photo-1550439062-609e1531270e?w=500" alt="Hinh 1"></div>
+        <div class="carousel__cell"><img src="https://images.unsplash.com/photo-1511556532299-8f662fc26c06?w=500" alt="Hinh 2"></div>
+        <div class="carousel__cell"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=500" alt="Hinh 3"></div>
+        <div class="carousel__cell"><img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=500" alt="Hinh 4"></div>
+        <div class="carousel__cell"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=500" alt="Hinh 5"></div>
+        <div class="carousel__cell"><img src="tri.jpg.jfif" alt="Ảnh của Trí"></div>
+    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const carousel = document.getElementById('lamp-carousel');
-
-            // Khi rê chuột vào, thêm class 'paused' để dừng animation
-            carousel.addEventListener('mouseenter', () => {
-                carousel.classList.add('paused');
-            });
-
-            // Khi rê chuột ra, xóa class 'paused' để animation tiếp tục
-            carousel.addEventListener('mouseleave', () => {
-                carousel.classList.remove('paused');
-            });
-        });
-    </script>
 </body>
 </html>
